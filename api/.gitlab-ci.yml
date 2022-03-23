@@ -1,0 +1,136 @@
+stages:
+  - init
+  - test
+  - prepare
+  - build
+  - deploy
+
+variables:
+  WEB_IMAGE: $CI_REGISTRY_IMAGE/web:$CI_COMMIT_SHORT_SHA-$CI_COMMIT_REF_SLUG
+
+composer:
+  stage: init
+  image: jitesoft/composer:8.0
+  tags:
+    - abr1
+  needs: []
+  artifacts:
+    paths:
+      - vendor/
+      - .env
+    expire_in: 15 mins
+  cache:
+    key: composer
+    paths:
+      - .composer/cache/
+  variables:
+    COMPOSER_HOME: .composer
+  script:
+    - cp .env.example .env
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - php artisan key:generate
+
+phpcs:
+  stage: test
+  image: php:8.0
+  tags:
+    - abr1
+  needs:
+    - composer
+  script:
+    - ./vendor/bin/phpcs --no-colors --warning-severity=0
+
+phpstan:
+  stage: test
+  image: php:8.0
+  tags:
+    - abr1
+  needs:
+    - composer
+  script:
+    - ./vendor/bin/phpstan analyse --memory-limit=1G --no-progress --no-ansi
+
+phpunit:
+  stage: test
+  image: lavoweb/php-8.0:xdebug
+  tags:
+    - abr1
+  needs:
+    - composer
+  variables:
+    XDEBUG_MODE: coverage
+  script:
+    - ./vendor/bin/phpunit --coverage-text --colors=never
+
+optimize:
+  stage: prepare
+  image: jitesoft/composer:8.0
+  tags:
+    - abr1
+  needs:
+    - composer
+    - phpcs
+    - phpstan
+    - phpunit
+  only:
+    - develop
+    - master
+  environment:
+    name: $CI_COMMIT_REF_NAME
+  artifacts:
+    paths:
+      - vendor/
+      - .env
+    expire_in: 10 mins
+  script:
+    - composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+
+web:
+  stage: build
+  image: docker:20.10.8
+  tags:
+    - abr1
+  needs:
+    - optimize
+  only:
+    - develop
+    - master
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - docker build --file ./docker/web/Dockerfile --tag $WEB_IMAGE .
+    - docker push $WEB_IMAGE
+
+staging:
+  stage: deploy
+  tags:
+    - testing
+  needs:
+    - web
+  environment:
+    name: develop
+  only:
+    - develop
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - export
+    - docker-compose -f docker-compose.stack.yml pull -q
+    - docker stack deploy --compose-file docker-compose.stack.yml --with-registry-auth --prune smsyncinventory_staging
+
+production:
+  stage: deploy
+  tags:
+    - production
+  needs:
+    - web
+  environment:
+    name: master
+  only:
+    - master
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - export
+    - docker-compose -f docker-compose.stack.yml pull -q
+    - docker stack deploy --compose-file docker-compose.stack.yml --with-registry-auth --prune smsyncinventory_production
