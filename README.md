@@ -39,7 +39,8 @@ make setup
 
 then (by default configs) the API will be exposed on http://127.0.0.1:80 and swagger document is available on http://127.0.0.1:8080
 you can also take a look at `wiki/swagger.yaml` for API details.
-there is a **simple UI (api consumer)** and by default exposes on http:127.0.0.1:8000
+
+there is a **simple UI (api consumer)** and by default exposes on http://127.0.0.1:8000
 
 ### Running containers via native docker APIs
 Open `Terminal` and type the following command:
