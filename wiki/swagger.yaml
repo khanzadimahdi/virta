@@ -1,0 +1,711 @@
+openapi: 3.0.0
+info:
+  title: 'OpenApi Virta Documentation'
+  description: 'Implementation of Virta station management'
+  contact:
+    email: khanzadimahdi@gmail.com
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://virta.fi'
+    description: 'API Server'
+paths:
+  /companies:
+    get:
+      tags:
+        - companies
+      summary: 'Store new company'
+      description: 'Get list of companies.'
+      operationId: getCompaniesList
+      parameters:
+        -
+          $ref: '#/components/parameters/PerPage'
+        -
+          $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          $ref: '#/components/responses/CompanyCollectionResponse'
+    post:
+      tags:
+        - companies
+      summary: 'Store new company'
+      description: 'Returns company data'
+      operationId: storeCompany
+      requestBody:
+        $ref: '#/components/schemas/StoreCompanyRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CompanyResponse'
+        '400':
+          description: 'Bad Request'
+        '422':
+          description: 'Unprocessable Entity.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'The given data was invalid.' }
+                  errors: { $ref: '#/components/schemas/InvalidStoreCompanyRequest' }
+                type: object
+  '/companies/{id}':
+    get:
+      tags:
+        - companies
+      summary: 'Get company information'
+      description: 'Returns company data'
+      operationId: getCompanyById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Company id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/CompanyResponse'
+        '400':
+          description: 'Bad Request'
+        '404':
+          description: 'Resource Not Found'
+    put:
+      tags:
+        - companies
+      summary: 'Update existing company'
+      description: 'Returns updated company data'
+      operationId: updateCompany
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Company id'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyRequest'
+      responses:
+        '202':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/CompanyResponse'
+        '400':
+          description: 'Bad Request'
+        '422':
+          description: 'Unprocessable Entity.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'The given data was invalid.' }
+                  errors: { $ref: '#/components/schemas/InvalidUpdateCompanyRequest' }
+                type: object
+        '404':
+          description: 'Resource Not Found'
+    delete:
+      tags:
+        - companies
+      summary: 'Delete existing company'
+      description: 'Deletes a record and returns no content'
+      operationId: deleteCompany
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Company id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema: {  }
+        '404':
+          description: 'Resource Not Found'
+  /stations/search:
+    get:
+      tags:
+        - stations
+      summary: 'Store new station'
+      description: 'Get list of stations.'
+      operationId: SearchStationsList
+      parameters:
+        -
+          $ref: '#/components/parameters/PerPage'
+        -
+          $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          $ref: '#/components/responses/StationCollectionResponse'
+  /stations:
+    get:
+      tags:
+        - stations
+      summary: 'Store new station'
+      description: 'Get list of stations.'
+      operationId: GetStationsList
+      parameters:
+        -
+          $ref: '#/components/parameters/PerPage'
+        -
+          $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          $ref: '#/components/responses/StationResponse'
+    post:
+      tags:
+        - stations
+      summary: 'Store new station'
+      description: 'Returns station data'
+      operationId: StoreStation
+      requestBody:
+        $ref: '#/components/schemas/StoreStationRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/StationResponse'
+        '400':
+          description: 'Bad Request'
+        '422':
+          description: 'Unprocessable Entity.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'The given data was invalid.' }
+                  errors: { $ref: '#/components/schemas/InvalidStoreStationRequest' }
+                type: object
+  '/stations/{id}':
+    get:
+      tags:
+        - stations
+      summary: 'Get station information'
+      description: 'Returns station data'
+      operationId: getStationById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Station id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/StationResponse'
+        '400':
+          description: 'Bad Request'
+        '404':
+          description: 'Resource Not Found'
+    put:
+      tags:
+        - stations
+      summary: 'Update existing station'
+      description: 'Returns updated station data'
+      operationId: updateStation
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Station id'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStationRequest'
+      responses:
+        '202':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/StationResponse'
+        '400':
+          description: 'Bad Request'
+        '422':
+          description: 'Unprocessable Entity.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'The given data was invalid.' }
+                  errors: { $ref: '#/components/schemas/InvalidUpdateStationRequest' }
+                type: object
+        '404':
+          description: 'Resource Not Found'
+    delete:
+      tags:
+        - stations
+      summary: 'Delete existing station'
+      description: 'Deletes a record and returns no content'
+      operationId: deleteStation
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Station id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema: {  }
+        '404':
+          description: 'Resource Not Found'
+components:
+  schemas:
+    InvalidSearchStationsRequest:
+      properties:
+        latitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The latitude field is invalid.'
+        longitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The longitude field is invalid.'
+        company_id:
+          type: array
+          items:
+            type: integer
+            example:
+              - 'The company_id field is invalid.'
+        distance:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The distance field is invalid.'
+      type: object
+    StoreCompanyRequest:
+      required:
+        - name
+        - parent_company_id
+      properties:
+        name:
+          type: string
+          example: 'John Doe'
+        parent_company_id:
+          type: integer
+          example: '1'
+      type: object
+    InvalidStoreCompanyRequest:
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The name field is invalid.'
+        parent_company_id:
+          type: array
+          items:
+            type: integer
+            example:
+              - 'The parent_company_id field is invalid.'
+      type: object
+    StoreStationRequest:
+      required:
+        - name
+        - latitude
+        - longitude
+        - company_id
+        - address
+      properties:
+        name:
+          type: string
+          example: 'John Doe'
+        latitude:
+          type: number
+          format: float
+          example: '95.65'
+        longitude:
+          type: number
+          format: float
+          example: '120.75'
+        company_id:
+          type: integer
+          example: '1'
+        address:
+          type: string
+          example: '5th avenue, nex to the bank'
+      type: object
+    InvalidStoreStationRequest:
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The name field is invalid.'
+        latitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The latitude field is invalid.'
+        longitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The longitude field is invalid.'
+        company_id:
+          type: array
+          items:
+            type: integer
+            example:
+              - 'The company_id field is invalid.'
+        address:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The address field is invalid.'
+      type: object
+    UpdateCompanyRequest:
+      required:
+        - name
+        - parent_company_id
+      properties:
+        name:
+          type: string
+          example: 'John Doe'
+        parent_company_id:
+          type: integer
+          example: '1'
+      type: object
+    InvalidUpdateCompanyRequest:
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The name field is invalid.'
+        parent_company_id:
+          type: array
+          items:
+            type: integer
+            example:
+              - 'The parent_company_id field is invalid.'
+      type: object
+    UpdateStationRequest:
+      required:
+        - name
+        - latitude
+        - longitude
+        - company_id
+        - address
+      properties:
+        name:
+          type: string
+          example: 'John Doe'
+        latitude:
+          type: number
+          format: float
+          example: '95.65'
+        longitude:
+          type: number
+          format: float
+          example: '120.75'
+        company_id:
+          type: integer
+          example: '1'
+        address:
+          type: string
+          example: '5th avenue, nex to the bank'
+      type: object
+    InvalidUpdateStationRequest:
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The name field is invalid.'
+        latitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The latitude field is invalid.'
+        longitude:
+          type: array
+          items:
+            type: float
+            example:
+              - 'The longitude field is invalid.'
+        company_id:
+          type: array
+          items:
+            type: integer
+            example:
+              - 'The company_id field is invalid.'
+        address:
+          type: array
+          items:
+            type: string
+            example:
+              - 'The address field is invalid.'
+      type: object
+    Company:
+      description: 'Transform the resource into an array.'
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: '1'
+        name:
+          type: string
+          readOnly: false
+          example: John
+      type: object
+    CompanyCollection:
+      type: object
+      allOf:
+        -
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Company'
+          type: object
+        -
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      description: 'Transform the resource collection into an array.'
+      properties:
+        links:
+          properties:
+            first:
+              description: 'link to the first page'
+              type: string
+              readOnly: true
+            last:
+              description: 'link to the last page'
+              type: string
+              readOnly: true
+            prev:
+              description: 'link to the previous page'
+              type: string
+              readOnly: true
+            next:
+              description: 'link to the next page'
+              type: string
+              readOnly: true
+          type: object
+        meta:
+          properties:
+            current_page:
+              description: 'current page number.'
+              type: integer
+              readOnly: true
+            from:
+              description: 'from index.'
+              type: integer
+              readOnly: true
+            last_page:
+              description: 'number of last page.'
+              type: integer
+              readOnly: true
+            path:
+              description: 'path of current page.'
+              type: string
+              readOnly: true
+            per_page:
+              description: 'number of items per page.'
+              type: integer
+              readOnly: true
+            to:
+              description: 'to index.'
+              type: integer
+              readOnly: true
+            total:
+              description: 'number of items in total.'
+              type: integer
+              readOnly: true
+          type: object
+      type: object
+    Station:
+      description: 'Transform the resource into an array.'
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: '1'
+        name:
+          type: string
+          readOnly: false
+          example: John
+        latitude:
+          type: number
+          format: float
+          readOnly: false
+          example: '95.6'
+        longitude:
+          type: number
+          format: float
+          readOnly: false
+          example: '97.25'
+        company_id:
+          type: integer
+          readOnly: false
+          example: '1'
+        address:
+          type: string
+          readOnly: false
+          example: 'a simple address'
+      type: object
+    StationCollection:
+      description: 'Transform the resource collection into an array.'
+      type: object
+      allOf:
+        -
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Station'
+          type: object
+        -
+          $ref: '#/components/schemas/Pagination'
+  responses:
+    CompanyResponse:
+      description: 'Company response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Company'
+    CompanyCollectionResponse:
+      description: 'company collection response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CompanyCollection'
+    StationResponse:
+      description: 'Station response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Station'
+    StationCollectionResponse:
+      description: 'Station collection response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StationCollection'
+  parameters:
+    SearchStationsLatitude:
+      name: latitude
+      in: query
+      description: latitude
+      required: true
+      schema:
+        type: float
+    SearchStationsLongitude:
+      name: longitude
+      in: query
+      description: longitude
+      required: true
+      schema:
+        type: float
+    SearchStationsCompanyID:
+      name: company_id
+      in: query
+      description: 'related comany''s id'
+      required: false
+      schema:
+        type: integer
+    SearchStationsDistance:
+      name: distance
+      in: query
+      description: 'max distance to station'
+      required: false
+      schema:
+        type: float
+    Page:
+      name: page
+      in: query
+      description: 'Page number.'
+      required: false
+      schema:
+        type: integer
+    PerPage:
+      name: perPage
+      in: query
+      description: 'number of elements per page.'
+      required: false
+      schema:
+        type: integer
+  requestBodies:
+    StoreCompanyRequestBody:
+      description: 'store company request body'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StoreCompanyRequest'
+    StoreStationRequestBody:
+      description: 'store station request body'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StoreStationRequest'
+    UpdateCompanyRequestBody:
+      description: 'store company request body'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCompanyRequest'
+    UpdateStationRequestBody:
+      description: 'store station request body'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateStationRequest'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: 'Token based authentication.'
+      bearerFormat: JWT
+      scheme: bearer

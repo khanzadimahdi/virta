@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<ruleset name="PHP_CodeSniffer">
+    <description>CodeSniffer configuration file</description>
+
+    <rule ref="PSR12"/>
+
+    <file>./app</file>
+    <file>./tests</file>
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*.(css|js|sh|phar|json|lock)</exclude-pattern>
+
+    <arg name="colors" />
+    <arg name="report" value="full" />
+    <arg value="ps" />
+
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+        <exclude-pattern>*/Unit/Repositories/BaseRepository/BaseTestCase.php</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing.Incorrect">
+        <exclude-pattern>*/Common/Bases/DTO.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+</ruleset>
