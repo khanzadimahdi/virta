@@ -43,6 +43,6 @@ class SearchController
             'json' => $data,
         ]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($response->getBody()->getContents(), true) ?? [];
     }
 }
