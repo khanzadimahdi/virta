@@ -10,10 +10,10 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://virta.fi'
+    url: 'http://127.0.0.1'
     description: 'API Server'
 paths:
-  /companies:
+  /api/v1/companies:
     get:
       tags:
         - companies
@@ -35,7 +35,11 @@ paths:
       description: 'Returns company data'
       operationId: storeCompany
       requestBody:
-        $ref: '#/components/schemas/StoreCompanyRequest'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCompanyRequest'
       responses:
         '201':
           $ref: '#/components/responses/CompanyResponse'
@@ -50,7 +54,7 @@ paths:
                   message: { type: string, example: 'The given data was invalid.' }
                   errors: { $ref: '#/components/schemas/InvalidStoreCompanyRequest' }
                 type: object
-  '/companies/{id}':
+  '/api/v1/companies/{id}':
     get:
       tags:
         - companies
@@ -138,7 +142,7 @@ paths:
               schema: {  }
         '404':
           description: 'Resource Not Found'
-  /stations/search:
+  /api/v1/stations/search:
     get:
       tags:
         - stations
@@ -150,10 +154,27 @@ paths:
           $ref: '#/components/parameters/PerPage'
         -
           $ref: '#/components/parameters/Page'
+        -
+          $ref: '#/components/parameters/SearchStationsLatitude'
+        -
+          $ref: '#/components/parameters/SearchStationsLongitude'
+        -
+          $ref: '#/components/parameters/SearchStationsCompanyID'
+        -
+          $ref: '#/components/parameters/SearchStationsDistance'
       responses:
         '200':
           $ref: '#/components/responses/StationCollectionResponse'
-  /stations:
+        '422':
+          description: 'Unprocessable Entity.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'The given data was invalid.' }
+                  errors: { $ref: '#/components/schemas/InvalidSearchStationsRequest' }
+                type: object
+  /api/v1/stations:
     get:
       tags:
         - stations
@@ -175,7 +196,11 @@ paths:
       description: 'Returns station data'
       operationId: StoreStation
       requestBody:
-        $ref: '#/components/schemas/StoreStationRequest'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreStationRequest'
       responses:
         '201':
           $ref: '#/components/responses/StationResponse'
@@ -190,7 +215,7 @@ paths:
                   message: { type: string, example: 'The given data was invalid.' }
                   errors: { $ref: '#/components/schemas/InvalidStoreStationRequest' }
                 type: object
-  '/stations/{id}':
+  '/api/v1/stations/{id}':
     get:
       tags:
         - stations
@@ -348,7 +373,7 @@ components:
         latitude:
           type: number
           format: float
-          example: '95.65'
+          example: '75.65'
         longitude:
           type: number
           format: float
@@ -434,7 +459,7 @@ components:
         latitude:
           type: number
           format: float
-          example: '95.65'
+          example: '75.65'
         longitude:
           type: number
           format: float

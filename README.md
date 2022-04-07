@@ -55,6 +55,18 @@ or
 docker-compose up -d
 ```
 
+#### Seeder
+
+seed database using one of these ways:
+
+1. ```
+   make seed
+   ```  
+  
+2. ```
+   docker-compose exec web seed
+   ```
+
 #### Installing the dependencies
 Make a ssh connection to the `web` container using one of these ways:  
 
@@ -81,6 +93,11 @@ Outside container:
 ```bash
 make openapi
 ```
+
+## Github Ci
+Github Ci exists on the below address
+
+https://github.com/khanzadimahdi/virta/actions
 
 ## Technical discussions (Images/Containers)
 This project includes seven docker containers as follows.
