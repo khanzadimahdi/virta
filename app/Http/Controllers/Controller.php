@@ -22,7 +22,7 @@ use Illuminate\Routing\Controller as BaseController;
  * )
  *
  * @OA\Server(
- *      url="http://virta.fi",
+ *      url="http://127.0.0.1",
  *      description="API Server"
  * )
  *

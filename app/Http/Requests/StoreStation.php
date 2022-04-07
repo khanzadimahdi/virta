@@ -17,7 +17,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *     schema="StoreStationRequest",
  *     required={"name", "latitude", "longitude", "company_id", "address"},
  *     @OA\Property(property="name", type="string", example="John Doe"),
- *     @OA\Property(property="latitude", type="float", example="95.65"),
+ *     @OA\Property(property="latitude", type="float", example="75.65"),
  *     @OA\Property(property="longitude", type="float", example="120.75"),
  *     @OA\Property(property="company_id", type="integer", example="1"),
  *     @OA\Property(property="address", type="string", example="5th avenue, nex to the bank")

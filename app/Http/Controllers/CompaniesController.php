@@ -22,7 +22,7 @@ class CompaniesController extends Controller
      * Display a listing of the resource.
      *
 	 * @OA\Get (
-	 *     path="/companies",
+	 *     path="/api/v1/companies",
 	 *     operationId="getCompaniesList",
 	 *     tags={"companies"},
 	 *     summary="Store new company",
@@ -48,14 +48,14 @@ class CompaniesController extends Controller
      * Store a newly created resource in storage.
      *
      * @OA\Post(
-     *     path="/companies",
+     *     path="/api/v1/companies",
      *     operationId="storeCompany",
      *     tags={"companies"},
      *     summary="Store new company",
      *     description="Returns company data",
      * 	   @OA\RequestBody(
      *         required=true,
-     *         ref="#/components/schemas/StoreCompanyRequest"
+     *         @OA\JsonContent(ref="#/components/schemas/StoreCompanyRequest")
      *     ),
      *     @OA\Response(
      *         response=201,
@@ -96,7 +96,7 @@ class CompaniesController extends Controller
      * Display the specified resource.
      *
      * @OA\Get(
-     *     path="/companies/{id}",
+     *     path="/api/v1/companies/{id}",
      *     operationId="getCompanyById",
      *     tags={"companies"},
      *     summary="Get company information",
@@ -136,7 +136,7 @@ class CompaniesController extends Controller
      * Update the specified resource in storage.
      *
      * @OA\Put(
-     *     path="/companies/{id}",
+     *     path="/api/v1/companies/{id}",
      *     operationId="updateCompany",
      *     tags={"companies"},
      *     summary="Update existing company",
@@ -146,17 +146,17 @@ class CompaniesController extends Controller
      *         description="Company id",
      *         required=true,
      *         in="path",
-     *     @OA\Schema(
+     *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *     @OA\JsonContent(ref="#/components/schemas/UpdateCompanyRequest")),
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateCompanyRequest")),
      *     @OA\Response(
      *         response=202,
      *         description="Successful operation",
-     *     @OA\JsonContent(ref="#/components/responses/CompanyResponse")),
+     *         @OA\JsonContent(ref="#/components/responses/CompanyResponse")),
      *     @OA\Response(
      *         response=400,
      *         description="Bad Request"
@@ -196,7 +196,7 @@ class CompaniesController extends Controller
      * Remove the specified resource from storage.
      *
      * @OA\Delete(
-     *     path="/companies/{id}",
+     *     path="/api/v1/companies/{id}",
      *     operationId="deleteCompany",
      *     tags={"companies"},
      *     summary="Delete existing company",

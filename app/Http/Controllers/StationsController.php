@@ -23,16 +23,32 @@ class StationsController extends Controller
      * Display a listing of the resource.
      *
 	 * @OA\Get (
-	 *     path="/stations/search",
+	 *     path="/api/v1/stations/search",
 	 *     operationId="SearchStationsList",
 	 *     tags={"stations"},
 	 *     summary="Store new station",
 	 *     description="Get list of stations.",
 	 *     @OA\Parameter(ref="#/components/parameters/PerPage"),
 	 *     @OA\Parameter(ref="#/components/parameters/Page"),
+	 * 	   @OA\Parameter(ref="#/components/parameters/SearchStationsLatitude"),
+	 * 	   @OA\Parameter(ref="#/components/parameters/SearchStationsLongitude"),
+	 * 	   @OA\Parameter(ref="#/components/parameters/SearchStationsCompanyID"),
+	 * 	   @OA\Parameter(ref="#/components/parameters/SearchStationsDistance"),
 	 *     @OA\Response(
 	 *         response=200,
 	 *         ref="#/components/responses/StationCollectionResponse"
+	 *     ),
+ 	 *     @OA\Response (
+	 *         response=422,
+	 *         description="Unprocessable Entity.",
+	 *         @OA\JsonContent(
+	 *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+	 *             @OA\Property(
+	 *                 property="errors",
+	 *                 type="object",
+	 *                 ref="#/components/schemas/InvalidSearchStationsRequest"
+	 *             )
+	 *         )
 	 *     )
 	 * )
      *
@@ -54,7 +70,7 @@ class StationsController extends Controller
      * Display a listing of the resource.
      *
 	 * @OA\Get (
-	 *     path="/stations",
+	 *     path="/api/v1/stations",
 	 *     operationId="GetStationsList",
 	 *     tags={"stations"},
 	 *     summary="Store new station",
@@ -80,14 +96,14 @@ class StationsController extends Controller
      * Store a newly created resource in storage.
      *
      * @OA\Post(
-     *     path="/stations",
+     *     path="/api/v1/stations",
      *     operationId="StoreStation",
      *     tags={"stations"},
      *     summary="Store new station",
      *     description="Returns station data",
      * 	   @OA\RequestBody(
      *         required=true,
-     *         ref="#/components/schemas/StoreStationRequest"
+     *         @OA\JsonContent(ref="#/components/schemas/StoreStationRequest")
      *     ),
      *     @OA\Response(
      *         response=201,
@@ -128,7 +144,7 @@ class StationsController extends Controller
      * Display the specified resource.
      *
      * @OA\Get(
-     *     path="/stations/{id}",
+     *     path="/api/v1/stations/{id}",
      *     operationId="getStationById",
      *     tags={"stations"},
      *     summary="Get station information",
@@ -168,7 +184,7 @@ class StationsController extends Controller
      * Update the specified resource in storage.
      *
      * @OA\Put(
-     *     path="/stations/{id}",
+     *     path="/api/v1/stations/{id}",
      *     operationId="updateStation",
      *     tags={"stations"},
      *     summary="Update existing station",
@@ -178,30 +194,31 @@ class StationsController extends Controller
      *         description="Station id",
      *         required=true,
      *         in="path",
-     *     @OA\Schema(
+     *         @OA\Schema(
      *             type="integer"
      *         )
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *     @OA\JsonContent(ref="#/components/schemas/UpdateStationRequest")),
-     *     @OA\Response(
-     *         response=202,
-     *         description="Successful operation",
-     *     @OA\JsonContent(ref="#/components/responses/StationResponse")),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request"
-     *     ),
- 	 *     @OA\Response (
-	 *         response=422,
-	 *         description="Unprocessable Entity.",
-	 *         @OA\JsonContent(
-	 *             @OA\Property(property="message", type="string", example="The given data was invalid."),
-	 *             @OA\Property(
-	 *                 property="errors",
-	 *                 type="object",
-	 *                 ref="#/components/schemas/InvalidUpdateStationRequest"
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateStationRequest")),
+     *         @OA\Response(
+     *             response=202,
+     *             description="Successful operation",
+     *             @OA\JsonContent(ref="#/components/responses/StationResponse")
+	 *         ),
+     *         @OA\Response(
+     *             response=400,
+     *             description="Bad Request"
+     *         ),
+ 	 *         @OA\Response (
+	 *             response=422,
+	 *             description="Unprocessable Entity.",
+	 *             @OA\JsonContent(
+	 *                 @OA\Property(property="message", type="string", example="The given data was invalid."),
+	 *                 @OA\Property(
+	 *                     property="errors",
+	 *                     type="object",
+	 *                     ref="#/components/schemas/InvalidUpdateStationRequest"
 	 *             )
 	 *         )
 	 *     ),
@@ -228,7 +245,7 @@ class StationsController extends Controller
      * Remove the specified resource from storage.
      *
      * @OA\Delete(
-     *     path="/stations/{id}",
+     *     path="/api/v1/stations/{id}",
      *     operationId="deleteStation",
      *     tags={"stations"},
      *     summary="Delete existing station",
